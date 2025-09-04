@@ -1,0 +1,111 @@
+---
+title: "EFA Categorical"
+output: html_notebook
+---
+Import Libraries
+```{r}
+library(foreign) 
+library(lavaan)
+library(semPlot)
+library(tikzDevice)
+library(semTools)
+library(performance)
+library(psych)
+library(tidyverse)
+library(multilevel)
+```
+
+
+Import Data
+```{r}
+hz <- read.csv('EFA_cat.csv', header = TRUE)
+
+hz <- subset(hz, select = -c(X))
+```
+
+Examine factorability of data
+```{r}
+correlation <- cor(hz)
+print(KMO(correlation))
+
+bart.test <- cortest.bartlett(correlation, n = nrow(hz))
+print(bart.test)
+```
+Check Initial Correlation
+Inspect item-item correlations and the corrected item-total correlations
+
+```{r}
+#Get Inter-item Correlations
+cor(hz)
+
+#Get item-total Correlations
+psych::alpha(hz)
+```
+Run the initial EFA - Inspect number of factors, item-factor loadings, cross-loadings and parsity of phrasing and factors
+
+```{r}
+efa <- fa(hz, nfactors = 2, fm = "ml", rotate = "promax")
+print(efa)
+
+eigen.values <- eigen(correlation) #Inspect Eigen values
+eigen.values$values
+
+scree(hz, pc = FALSE) #Inspect Scree Plot
+```
+
+Rename the retained variables
+```{r}
+hz <- hz %>% 
+  rename(
+    Item1 = X10,
+    Item2 = X11,
+    Item3 = X12,
+    Item4 = X13,
+    Item5 = X16,
+    Item6 = X18,
+    Item7 = X3,
+    Item8 = X6,
+    Item9 = X7
+    )
+
+```
+
+Run the final EFA
+
+```{r}
+efa <- fa(hz[, c("Item1" , "Item2" , "Item3" , "Item4" , "Item5" , "Item6" , "Item7" , "Item8" , "Item9")], nfactors = 2, fm = "ml", rotate = "promax")
+
+print(efa)
+print(efa$communalities)
+print(mean(efa$communalities))
+print(efa$loadings)
+alpha_f1 <- psych::alpha(hz[, c("Item1" , "Item2" , "Item3" , "Item4" , "Item5" , "Item6" , "Item7" , "Item8" , "Item9")])
+
+#Corrected item–total correlations
+alpha_f1$item.stats
+```
+
+
+Get the correlations for the final structure
+```{r}
+#Get Inter-item Correlations
+print(min(cor(hz[, c("Item1" , "Item2" , "Item3" , "Item4" , "Item5" , "Item6" , "Item7" , "Item8")])))
+print(mean(cor(hz[, c("Item1" , "Item2" , "Item3" , "Item4" , "Item5" , "Item6" , "Item7" , "Item8")])))
+cor(hz[, c("Item1" , "Item2" , "Item3" , "Item4" , "Item5" , "Item6" , "Item7" , "Item8")])
+```
+
+
+Get McDonald's Omega
+```{r}
+# Now compute omega
+omega_result <- omega(hz[, c("Item1" , "Item2" , "Item3" , "Item4" , "Item5" , "Item6" , "Item7" , "Item8" , "Item9")], nfactors = 2)
+
+print(omega_result)
+```
+
+Get the factor-factor correlations
+```{r}
+efa$Phi
+```
+
+
