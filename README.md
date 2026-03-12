@@ -5,3 +5,13 @@ This is the repository accompanying the paper 'Before the Explanation: Proposing
 The various drafts of the scale throughout development can be found in the folder 'Scales'. The code used for statistical analysis is deposited in the folder 'Code'.
 
 The Scale presented during the Expert Interviews is 'Draft 1'. The scale presented during Layperson Interviews is 'Draft 2'.
+
+#Draft Order:
+
+  Draft 1: Initial Draft based in Literature Review
+
+  Draft 2: Refined Draft based on Expert Feedback
+
+  Draft 3: Refined Draft based on Focus Groups
+
+  Draft 4: Final draft after Pilot Study
