@@ -1,0 +1,33 @@
+Subscale,Subdivision,Item
+Understanding,,I know what this feature measures.
+,,I know what this feature represents.
+,,I require no support to understand the feature.
+,,I think that this feature is clear.
+,,I think that I can easily access a definition of the feature.
+,,I think that this feature is ambiguous.
+Measurement,Numerical,I think that the measurement of the feature can be repeated with the same outcome.
+,,I can easily understand the scale of the feature.
+,,I think it is feasible for me to verify the value of the feature.
+,,I require no support to understand the measuring scale of the feature.
+,,I can easily understand if a given value of the feature is high or low.
+,,I know which values a feature can take.
+,,I know the endpoints of the scale.
+,,I know the meaning of the endpoints of the scale.
+,,I think that the feature is measured correctly.
+,Categorical,I think that the measurement of the feature can be repeated with the same outcome.
+,,I can easily understand how the categories were assessed.
+,,I can easily understand the order of categories.
+,,I think it is feasible for me to verify the specific category of the feature.
+,,I understand all possible values of the categorical feature.
+,,I think that the feature is measured correctly.
+Faithfulness,,"To my understanding, the feature is known to impact the outcome."
+,,I understand how this feature is related to other features.
+,,I understand why the feature is used to predict the outcome.
+,,I am interested in whether the feature affects the decision.
+,,"In my opinion, the feature should be used to predict the outcome."
+,,I know how this feature may influence other features.
+,,I think that it is feasible for me to change the value of this feature.
+,,I think changing the value of this feature would change the outcome.
+,,I think that the feature is important for the outcome.
+,,I think it is desirable that the feature influences the outcome.
+,,I know how a change in the feature's value should impact the outcome.

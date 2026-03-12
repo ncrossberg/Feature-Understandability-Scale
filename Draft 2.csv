@@ -1,0 +1,60 @@
+Subscale,Subdivision,Item
+Understanding,,I know what this feature measures.
+,,I know what this feature represents
+,,I require no support to understand the feature.
+,,I think that this feature is clear.
+,,I expect others affected by this decision to easily understand this feature.
+,,I expect others affected by this decision to require no support to understand the feature.
+,,I think that this feature can be easily understood by an expert in the field.
+,,I think that this feature can be easily understood by a non-expert in the field.
+,,I think that I can easily access an explanation of the feature.
+,,I think that this feature is ambiguous.
+Measurement,Numerical,I trust that the feature is measured using an objective scale.
+,,I trust that the measurement of the feature can be repeated with the same outcome.
+,,I can easily understand the scale of the feature
+,,I think I can verify the value of the feature with reasonable effort.
+,,I require no references to understand where a given value lies on the scale.
+,,I require no references to understand whether a given value of the feature is high or low.
+,,I expect others affected by this decision to require no references to understand where a given value of the feature lies on the scale.
+,,I expect others affected by this decision to require no references to understand whether a given value of the feature is high or low.
+,,I require no support to understand the measuring scale of the feature.
+,,I require no references to understand the measuring scale of the feature.
+,,I can easily understand if a given value of the feature is high or low.
+,,"I expect others to require no support or references to understand 
+the measuring scale of the feature."
+,,I know which values a feature can take.
+,,I know the endpoints of the scale.
+,,I know the meaning of the endpoints of the scale.
+,,I trust that the feature is measured correctly.
+,Categorical,I trust that the categories are assessed objectively.
+,,"I trust that the measurement of the feature can be 
+repeated with the same outcome."
+,,I can easily understand how the categories were assessed.
+,,I can easily understand the order of categories.
+,,I think I can verify the category of the feature with reasonable effort.
+,,I require no references to understand the order of the categories.
+,,I expect others affected by this decision to require no references to understand each category.
+,,I expect others affected by this decision to require no references to understand the order of the categories.
+,,I understand all possible values of the categorical feature.
+,,I expect others affected by the decision to understand all possible values of the categorical feature.
+,,I trust that the feature is measured correctly.
+Faithfulness,,"To my understanding, the feature is known to impact the decision."
+,,"To my understanding, the feature is known to impact the decision more than the other features."
+,,I understand how this feature is related to other features.
+,,I understand why the feature is used to predict the outcome.
+,,I think the feature should be used to predict the outcome.
+,,I am interested in how the feature affects the decision.
+,,I am interested in whether the feature affects the decision.
+,,I know how a change in value would impact the outcome.
+,,"In my opinion, the feature should be used to predict the outcome."
+,,I know how this feature may influence other features.
+,,I know how this feature may affect other features.
+,,I know how this feature may be combined with other features.
+,,I think that I could change the value of this feature with reasonable effort.
+,,I think changing the value of this feature would change the outcome.
+,,I think I can change the value of this feature in a way that changes the outcome.
+,,I think a change in the value of this feature should change the outcome.
+,,I trust that the feature is important for the outcome.
+,,I am interested in how this feature affects the outcome.
+,,I think it is fair that the feature influences the outcome.
+,,I think it is desirable that the feature influences the outcome.

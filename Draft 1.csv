@@ -1,0 +1,47 @@
+Subscale,Subdivision,Item
+Understanding,,I can easily understand this feature.
+,,I require no support to understand the feature.
+,,I expect others affected by this decision to easily understand this feature.
+,,"I expect others affected by this decision to require no support 
+to understand the feature."
+,,I think that this feature can be easily understood by an expert in the field.
+,,I think that I can easily access an explanation of the feature.
+Measurement,Numerical,The feature is measured using an objective scale.
+,,The scale of the feature is reliable.
+,,The scale of the feature is valid.
+,,The scale of the feature is easily understandable.
+,,I think I can verify the value of the feature with reasonable effort.
+,,I require no references to understand where a given value lies on the scale.
+,,"I require no references to understand whether a given value of the 
+feature is high or low."
+,,"I expect others affected by this decision to require no references to understand 
+where a given value of the feature lies on the scale."
+,,"I expect others affected by this decision to require no references to understand 
+whether a given value of the feature is high or low."
+,,"I require no support or references to understand the measuring 
+scale of the feature."
+,,I can easily understand if a given value of the feature is high or low.
+,,"I expect others to require no support or references to understand the 
+measuring scale of the feature."
+,Categorical,The categories are assessed in an objective manner.
+,,The assessment is reliable.
+,,The assessment is valid.
+,,The method of assessing categories is easily understood.
+,,I can easily understand the order of categories.
+,,I think I can verify the category of the feature with reasonable effort.
+,,I require no references to understand the order of the categories.
+,,"I expect others affected by this decision to require no references to 
+understand each category."
+,,"I expect others affected by this decision to require no references to 
+understand the order of the categories."
+,,I understand all possible values of the categorical feature.
+,,"I expect others affected by the decision to understand all possible 
+values of the categorical feature."
+Faithfulness,,"To my best knowledge, the feature is known to affect the decision."
+,,"To my best knowledge, the feature is the main cause of the decision."
+,,I understand how this feature is related to other features.
+,,I understand why the feature has been included.
+,,I think the feature should be included in the inputs.
+,,"To my best knowledge, the feature should be included in the inputs."
+,,I am interested in how the feature affects the decision.
+,,I am interested in whether the feature affects the decision.
