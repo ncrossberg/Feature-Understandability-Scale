@@ -1,0 +1,236 @@
+---
+title: "EFA Numerical"
+output: html_notebook
+---
+
+First load data and remove empty first column
+```{r}
+library(foreign) 
+library(lavaan)
+library(semPlot)
+library(tikzDevice)
+library(MVN)
+library(semTools)
+library(performance)
+library(psych)
+library(tidyverse)
+library(multilevel)
+library(caTools)
+library(car)
+library(quantmod)
+library(MASS)
+library(corrplot)
+library(relimp, pos = 4)
+library(paran)
+
+hz <- read.csv('EFA_num.csv', header = TRUE)
+
+hz <- subset(hz, select = -c(X))
+```
+
+Examine factorability of data
+
+```{r}
+correlation <- polychoric(hz)$rho
+print(KMO(correlation))
+
+bart.test <- cortest.bartlett(correlation, n = nrow(hz))
+print(bart.test)
+
+#Indicates Items can be factored
+```
+```{r}
+#Check for normality of data distribution
+library(MVN)
+mvn(hz, mvn_test = 'mardia')
+
+#Items are not normally distributed so we continue with weighted least squares as factoring method.
+```
+
+Check for linearity of relationships by comparing pearson and polychloric correlations
+
+```{r}
+library(psych)
+
+pearson_cor <- cor(hz, use = "pairwise.complete.obs")
+poly_cor <- polychoric(hz)$rho
+
+round(pearson_cor, 2) -round(poly_cor, 2)
+
+#The differences are a little bigger than for the categorical data but not erratic
+```
+
+
+
+Check Initial Correlation - Using Polychloric correlations as data is ordinal
+
+```{r}
+#Get Item-Item Correlations
+poly_cor <- polychoric(hz)$rho
+round(poly_cor, 2)
+#Item Item correlations do not appear excessively high (>0.9)
+
+#Remove X11 due to correlation > 0.85
+#hz <- subset(hz, select = -X11)
+poly_cor <- polychoric(hz)$rho
+round(poly_cor, 2)
+
+#Compute Item-total correlations
+#Compute Item-Total Correlations
+item_total_cor <- function(R) {
+  k <- ncol(R)
+  result <- numeric(k)
+  
+  for (i in 1:k) {
+    # indices of all other items
+    others <- setdiff(1:k, i)
+    
+    # sum of correlations between item i and other items
+    sum_r_i_others <- sum(R[i, others])
+    
+    # variance of the total score excluding item i
+    var_total_minus_i <- sum(R[others, others])
+    
+    # corrected item-total correlation
+    result[i] <- sum_r_i_others / sqrt(var_total_minus_i)
+  }
+  
+  names(result) <- colnames(R)
+  return(result)
+}
+
+item_total_cor(poly_cor)
+#Iem-total correlations look good
+
+```
+
+```{r}
+#Check Spearman correlation matrix to assess multicollinearity
+cor(hz, method = "spearman")
+```
+
+
+
+Decide Number of Components
+
+```{r}
+cor_matrix <- polychoric(hz)$rho
+eigen.values <- eigen(correlation) #Inspect Eigen values
+eigen.values$values
+
+scree(hz, pc = FALSE) #Inspect Scree Plot
+
+#Conduct Parallel analysis
+paran(hz, iterations = 5000, centile = 0.99, quietly = FALSE, 
+    status = TRUE, all = TRUE, graph = TRUE, color = TRUE, 
+    col = c("black", "red", "blue"), lty = c(1, 2, 3), lwd = 1, legend = TRUE, 
+    file = "", width = 640, height = 640, grdevice = "png", seed = 0)
+
+#Follow parallel analysis and retain 3 components
+```
+```{r}
+library(psych)
+library(lavaan)
+library(semPlot)
+
+# Run EFA with 3 factors
+efa <- fa(hz, nfactors = 3, fm = "wls", rotate = "promax", cor = 'poly')
+summary(efa)
+
+# Extract factor loadings
+loadings <- as.data.frame(efa$loadings[1:ncol(hz), 1:3])
+
+# Assign each item to the factor with the highest absolute loading
+factor_assignments <- apply(loadings, 1, function(x) which.max(abs(x)))
+
+png("EFA_NUM_FINAL.png", width = 8, height = 6, units = "in", res = 300)
+
+
+psych::fa.diagram(efa, 
+                  main = "",          # Remove title for publication
+                  simple = TRUE,      # Show only the primary loading for each item
+                  cut = 0.2,          # Only show loadings > .30
+                  digits = 2, 
+                  adj = 1,            # Adjust label position
+                  e.size = 0.05,      # Size of the item boxes
+                  rsize = 0.15,       # Size of the factor circles
+                  side = 1)           # Standard tree orientation
+
+# 3. Save the file
+dev.off()
+```
+```{r}
+#Remove items 2 and 4
+hz <- subset(hz, select = -c(X2, X4))
+
+#Re-run analysis with two factors
+efa <- fa(hz, nfactors = 2, fm = "wls", rotate = "promax", cor = 'poly')
+summary(efa)
+
+# Extract factor loadings
+loadings <- as.data.frame(efa$loadings[1:ncol(hz), 1:2])
+
+# Assign each item to the factor with the highest absolute loading
+factor_assignments <- apply(loadings, 1, function(x) which.max(abs(x)))
+```
+
+
+
+Run the final EFA
+```{r}
+#Rename the Items we're retaining
+
+hz <- hz %>%
+  rename(
+    Item1 = X10,
+    Item2 = X12,
+    Item3 = X17,
+    Item4 = X18,
+    Item5 = X20,
+    Item6 = X3,
+    Item7 = X6,
+    Item8 = X7
+  )
+
+
+#Run EFA
+efa <- fa(hz[, c("Item1" , "Item2" , "Item3" , "Item4" , "Item5" , "Item6" , "Item7" , "Item8")], nfactors = 2, fm = "wls", rotate = "promax", cor = 'poly')
+
+#Print Results
+print(efa)
+print(efa$communalities)
+print(mean(efa$communalities))
+print(efa$loadings)
+alpha_f1 <- psych::alpha(hz[, c("Item1" , "Item2" , "Item3" , "Item4" , "Item5" , "Item6" , "Item7" , "Item8")])
+
+# View corrected item–total correlations
+alpha_f1$item.stats
+
+#Print final diagram
+fa.diagram(efa)
+
+```
+Get the inter-item correlations
+```{r}
+#Get Inter-item Correlations
+print(min(polychoric(hz[, c("Item1" , "Item2" , "Item3" , "Item4" , "Item5" , "Item6" , "Item7" , "Item8")])$rho))
+print(mean(polychoric(hz[, c("Item1" , "Item2" , "Item3" , "Item4" , "Item5" , "Item6" , "Item7" , "Item8")])$rho))
+polychoric(hz[, c("Item1" , "Item2" , "Item3" , "Item4" , "Item5" , "Item6" , "Item7" , "Item8")])$rho
+
+#Get Item-total Correlations
+item_total_cor(polychoric(hz[, c("Item1" , "Item2" , "Item3" , "Item4" , "Item5" , "Item6" , "Item7" , "Item8")])$rho)
+```
+Compute McDonald's Omega
+
+```{r}
+# Now compute omega
+omega_result <- omega(hz[, c("Item1" , "Item2" , "Item3" , "Item4" , "Item5" , "Item6" , "Item7" , "Item8")], nfactors = 2, fm = 'wls', poly = TRUE)
+
+print(omega_result)
+```
+
+And compute the factor-correlations
+```{r}
+efa$Phi
+```
+
