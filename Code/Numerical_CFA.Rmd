@@ -37,11 +37,13 @@ hz <- hz %>%
     Item8 = X7,
   )
 
-hz.model <- '
-Output =~ Item1 + Item2 + Item3 + Item4 + Item5
-MandU =~ Item6 + Item7 + Item8'
+
 
 # hz.model <- 'Output =~ Item1 + Item2 + Item3 + Item4 + Item5 + Item6 + Item7 + Item8'
+
+hz.model <- '
+MandU =~ Item1 + Item2 + Item3 + Item4 + Item5
+Output =~ Item6 + Item7 + Item8'
 
 hz.fit <- cfa(hz.model,
                data = hz,
@@ -53,38 +55,38 @@ summary(hz.fit, standardized=TRUE, std = TRUE, ci = TRUE)
 # library(semPlot)
 # 
 # # 1. Open the PNG device
-# png("CFA_NUM_FIN.png", width = 10, height = 7, units = "in", res = 300)
+ png("CFA_NUM_FIN.png", width = 10, height = 7, units = "in", res = 300)
 # 
 # # 2. Generate the plot
-# semPaths(hz.fit, 
-#          whatLabels = "std",        # Standardized coefficients
-#          layout = "tree",           # Tree structure
-#          rotation = 1,              # 1 = Latents at Top, Items at Bottom
-#          nCharNodes = 0,            # Don't abbreviate variable names
-#          edge.label.cex = 0.9,      # Size of the loading numbers
-#          
-#          # Line Styling
-#          edge.color = "black",      # Solid black lines
-#          lty = 1,                   # Force all lines to be solid (no dashes)
-#          edge.width = 1.2,
-#          
-#          # Node Styling
-#          color = "white",           # White background for boxes/circles
-#          border.width = 1.5,        # Crisp borders
-#          sizeMan = 8,               # Width of item boxes
-#          sizeLat = 12,              # Width of factor circles
-#          
-#          # Cleaning the boxes (removes the "weird lines")
-#          residuals = FALSE,         # Removes error variance arrows/lines
-#          intercepts = FALSE,        # Removes intercept triangles/lines
-#          thresholds = FALSE,        # Removes categorical threshold lines
-#          
-#          # Layout adjustments
-#          mar = c(8, 4, 8, 4),       # Margins (Bottom, Left, Top, Right)
-#          ask = FALSE)
+semPaths(hz.fit,
+         whatLabels = "std",        # Standardized coefficients
+         layout = "tree",           # Tree structure
+         rotation = 1,              # 1 = Latents at Top, Items at Bottom
+         nCharNodes = 0,            # Don't abbreviate variable names
+         edge.label.cex = 0.9,      # Size of the loading numbers
+
+         # Line Styling
+         edge.color = "black",      # Solid black lines
+         lty = 1,                   # Force all lines to be solid (no dashes)
+         edge.width = 1.2,
+
+         # Node Styling
+         color = "white",           # White background for boxes/circles
+         border.width = 1.5,        # Crisp borders
+         sizeMan = 8,               # Width of item boxes
+         sizeLat = 12,              # Width of factor circles
+
+         # Cleaning the boxes (removes the "weird lines")
+         residuals = FALSE,         # Removes error variance arrows/lines
+         intercepts = FALSE,        # Removes intercept triangles/lines
+         thresholds = FALSE,        # Removes categorical threshold lines
+
+         # Layout adjustments
+         mar = c(8, 4, 8, 4),       # Margins (Bottom, Left, Top, Right)
+         ask = FALSE)
 # 
 # # 3. Save the file
-# dev.off()
+ dev.off()
 ```
 ```{r}
 fitmeasures(hz.fit, c('cfi', 'rmsea', 'rmsea.ci.upper', 'bic', 'tli', 'srmr'), ci = TRUE)
