@@ -39,11 +39,11 @@ hz <- hz %>%
 
 
 
-# hz.model <- 'Output =~ Item1 + Item2 + Item3 + Item4 + Item5 + Item6 + Item7 + Item8'
+hz.model <- 'Output =~ Item1 + Item2 + Item3 + Item4 + Item5 + Item6 + Item7 + Item8'
 
-hz.model <- '
-MandU =~ Item1 + Item2 + Item3 + Item4 + Item5
-Output =~ Item6 + Item7 + Item8'
+# hz.model <- '
+# MandU =~ Item1 + Item2 + Item3 + Item4 + Item5
+# Output =~ Item6 + Item7 + Item8'
 
 hz.fit <- cfa(hz.model,
                data = hz,
@@ -89,10 +89,13 @@ semPaths(hz.fit,
  dev.off()
 ```
 ```{r}
-fitmeasures(hz.fit, c('cfi', 'rmsea', 'rmsea.ci.upper', 'bic', 'tli', 'srmr'), ci = TRUE)
+fitmeasures(hz.fit, c('cfi', 'rmsea', 'rmsea.ci.lower', 'rmsea.ci.upper', 'bic', 'tli', 'srmr'), ci = TRUE)
 ```
 
-
+```{r}
+fitMeasures(hz.fit, c("chisq.scaled", "df.scaled", "pvalue.scaled",
+                       "baseline.chisq.scaled", "baseline.df.scaled", "baseline.pvalue.scaled"))
+```
 
 ```{r}
 #Get final factor metrics

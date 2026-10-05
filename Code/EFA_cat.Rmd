@@ -19,6 +19,7 @@ library(car)
 library(quantmod)
 library(MASS)
 library(corrplot)
+library(paran)
 ```
 
 
@@ -29,6 +30,7 @@ hz <- subset(hz, select = -c(X))
 ```
 
 ```{r}
+
 #Check for Mulitvariate Normality
 mvn(hz, mvn_test = 'mardia')
 #Multivariate Normality is violated so we use robust estimator
@@ -45,7 +47,7 @@ print(bart.test)
 ```
 Look at inter item correlations and compare pearson to polychoric. Differences are relatively small and consistent indicating linearity
 ```{r}
-pearson_cor <- cor(hz, use = "pairwise.complete.obs")
+pearson_cor <- cor(hz, use = "pairwise.complete.obs") 
 poly_cor <- polychoric(hz)$rho
 
 round(pearson_cor, 2)-round(poly_cor, 2)
@@ -92,14 +94,13 @@ item_total_cor <- function(R) {
 item_total_cor(poly_cor)
 ```
 
-
 Run the initial EFA - Inspect number of factors, item-factor loadings, cross-loadings and parsity of phrasing and factors
 
 ```{r}
 efa <- fa(hz, nfactors = 2, fm = "wls", rotate = "promax", cor = 'poly')
 print(efa)
 
-eigen.values <- eigen(correlation) #Inspect Eigen values
+eigen.values <- eigen(correlation) #Inspect Eigenvalues
 eigen.values$values
 
 scree(hz, pc = FALSE) #Inspect Scree Plot
@@ -191,6 +192,46 @@ alpha_f1 <- psych::alpha(hz[, c("Item1" , "Item2" , "Item3" , "Item4" , "Item5" 
 #Corrected item–total correlations
 alpha_f1$item.stats
 ```
+```{r}
+set.seed(123)  # for reproducibility
+efa <- fa(hz[, paste0("Item", 1:9)],
+          nfactors = 2,
+          fm = "wls",
+          rotate = "promax",
+          cor = "poly",
+          n.iter = 1000,
+          alpha = 0.1)   # bootstrap iterations
+
+print(efa, digits = 3)   # includes CIs for loadings
+
+load <- unclass(efa$loadings)[, 1:2]
+ci   <- as.matrix(efa$cis$ci)
+p <- nrow(load); k <- ncol(load)
+
+if (nrow(ci) == p * k) {
+  # one row per loading, stacked factor by factor; columns = lower, upper
+  lo <- matrix(ci[, 1], nrow = p, ncol = k)
+  up <- matrix(ci[, 2], nrow = p, ncol = k)
+} else if (ncol(ci) == 2 * k) {
+  # lower bounds for all factors, then upper bounds
+  lo <- ci[, 1:k]
+  up <- ci[, (k + 1):(2 * k)]
+} else stop("Unexpected layout, check str(efa$cis$ci)")
+
+# Sanity check: every loading should sit inside its own interval
+all(load >= lo & load <= up)
+
+fmt <- function(l, a, b) sprintf("%.3f [%.3f, %.3f]", l, a, b)
+
+tab <- data.frame(
+  Item     = rownames(load),
+  Factor1  = fmt(load[, 1], lo[, 1], up[, 1]),
+  Factor2  = fmt(load[, 2], lo[, 2], up[, 2])
+)
+tab
+```
+
+
 
 
 Get the correlations for the final structure

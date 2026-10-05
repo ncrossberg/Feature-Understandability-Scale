@@ -46,12 +46,13 @@ hz <- hz %>%
 
 
 ```{r}
-hz.model <- '
-MandU =~ Item1 + Item2 + Item3 + Item4 + Item5 + Item6
-Output =~ Item7 + Item8 + Item9'
 
 # hz.model <- '
-# MandU =~ Item1 + Item2 + Item3 + Item4 + Item5 + Item6 + Item7 + Item8 + Item9'
+# MandU =~ Item1 + Item2 + Item3 + Item4 + Item5 + Item6
+# Output =~ Item7 + Item8 + Item9'
+
+hz.model <- '
+MandU =~ Item1 + Item2 + Item3 + Item4 + Item5 + Item6 + Item7 + Item8 + Item9'
 
 hz.fit <- cfa(hz.model, data=hz, estimator = 'wlsmv', ordered = names(hz))
 summary(hz.fit, standardized=TRUE)
@@ -94,7 +95,11 @@ dev.off()
 
 
 ```{r}
-fitmeasures(hz.fit, c('cfi', 'rmsea', 'rmsea.ci.upper', 'bic', 'tli', 'srmr'))
+fitmeasures(hz.fit, c('cfi', 'rmsea', 'rmsea.ci.lower', 'rmsea.ci.upper', 'bic', 'tli', 'srmr'), ci = TRUE)
+```
+```{r}
+fitMeasures(hz.fit, c("chisq.scaled", "df.scaled", "pvalue.scaled",
+                       "baseline.chisq.scaled", "baseline.df.scaled", "baseline.pvalue.scaled"))
 ```
 
 
